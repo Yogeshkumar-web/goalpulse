@@ -1,22 +1,43 @@
 'use client'
 
 import { createGoal } from '../../actions/goals'
-import { useActionState } from 'react' // Next.js 15 / React 19
-// If useActionState is not available yet in the installed version, fallback to useFormState
-// But create-next-app@latest should have it. I'll use standard form action for simplicity first.
+import { useToast } from '@/app/components/ToastProvider'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function NewGoalPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { showToast } = useToast()
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    const formData = new FormData(e.currentTarget)
+    const result = await createGoal(formData)
+
+    if (result.success) {
+      showToast('Goal created successfully! 🎉', 'success')
+      router.push('/')
+    } else {
+      showToast(result.error || 'Failed to create goal', 'error')
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="container" style={{ maxWidth: '600px' }}>
       <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: 'var(--spacing-6)' }}>Create New Goal</h2>
       
-      <form action={async (formData) => { await createGoal(formData) }} className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+      <form onSubmit={handleSubmit} className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
         <div>
           <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: '500' }}>Goal Title</label>
           <input 
             type="text" 
             name="title" 
             required 
+            disabled={isSubmitting}
             placeholder="e.g. Learn Guitar"
             style={{ 
               width: '100%', 
@@ -34,6 +55,7 @@ export default function NewGoalPage() {
           <textarea 
             name="description" 
             rows={3}
+            disabled={isSubmitting}
             placeholder="Why is this important?"
             style={{ 
               width: '100%', 
@@ -52,6 +74,7 @@ export default function NewGoalPage() {
             type="date" 
             name="deadline" 
             required 
+            disabled={isSubmitting}
             style={{ 
               width: '100%', 
               padding: 'var(--spacing-2)', 
@@ -63,10 +86,45 @@ export default function NewGoalPage() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary" style={{ marginTop: 'var(--spacing-4)' }}>
-          Create Goal
+        <button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="btn btn-primary" 
+          style={{ 
+            marginTop: 'var(--spacing-4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 'var(--spacing-2)',
+            opacity: isSubmitting ? 0.7 : 1,
+            cursor: isSubmitting ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {isSubmitting ? (
+            <>
+              <span className="spinner" />
+              Creating...
+            </>
+          ) : (
+            '✨ Create Goal'
+          )}
         </button>
       </form>
+
+      <style jsx>{`
+        .spinner {
+          width: 16px;
+          height: 16px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }

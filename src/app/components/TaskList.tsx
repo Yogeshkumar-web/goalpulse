@@ -2,6 +2,7 @@
 
 import { toggleTaskCompletion } from '../actions/tasks'
 import { useState } from 'react'
+import TaskItem from './TaskItem'
 
 type Task = {
   id: string
@@ -28,7 +29,8 @@ export default function TaskList({
     return map
   })
 
-  const handleToggle = async (taskId: string, currentStatus: boolean) => {
+  const handleToggle = async (taskId: string) => {
+    const currentStatus = completions[taskId] || false
     // Optimistic update
     setCompletions(prev => ({ ...prev, [taskId]: !currentStatus }))
     
@@ -41,33 +43,21 @@ export default function TaskList({
   }
 
   return (
-    <div className="card">
-      <h3 style={{ marginBottom: 'var(--spacing-4)', fontSize: '1.2rem' }}>Daily Tasks</h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-        {tasks.map(task => {
-          const isCompleted = completions[task.id] || false
-          return (
-            <div key={task.id} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-3)' }}>
-              <input 
-                type="checkbox" 
-                checked={isCompleted}
-                onChange={() => handleToggle(task.id, isCompleted)}
-                style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: 'var(--primary)' }}
-              />
-              <span style={{ 
-                textDecoration: isCompleted ? 'line-through' : 'none',
-                color: isCompleted ? 'var(--text-muted)' : 'var(--text-primary)',
-                transition: 'color 0.2s'
-              }}>
-                {task.title}
-              </span>
-            </div>
-          )
-        })}
-        {tasks.length === 0 && (
-          <p style={{ color: 'var(--text-secondary)' }}>No tasks defined for this goal.</p>
-        )}
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
+      {tasks.map(task => {
+        const isCompleted = completions[task.id] || false
+        return (
+          <TaskItem 
+            key={task.id}
+            task={task}
+            isCompleted={isCompleted}
+            onToggle={handleToggle}
+          />
+        )
+      })}
+      {tasks.length === 0 && (
+        <p style={{ color: 'var(--text-secondary)' }}>No tasks defined for this goal.</p>
+      )}
     </div>
   )
 }

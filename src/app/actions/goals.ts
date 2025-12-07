@@ -59,6 +59,43 @@ export async function createGoal(formData: FormData) {
   }
 }
 
+export async function updateGoal(id: string, formData: FormData) {
+  const session = await auth()
+  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+  const title = formData.get('title') as string
+  const description = formData.get('description') as string
+  const deadlineStr = formData.get('deadline') as string
+  
+  if (!title || !deadlineStr) {
+    return { success: false, error: 'Title and deadline are required' }
+  }
+
+  try {
+    // Verify ownership
+    const goal = await prisma.goal.findUnique({ where: { id } })
+    if (goal?.userId !== session.user.id) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    await prisma.goal.update({
+      where: { id },
+      data: {
+        title,
+        description,
+        deadline: new Date(deadlineStr),
+      }
+    })
+
+    revalidatePath('/')
+    revalidatePath(`/goals/${id}`)
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to update goal:', error)
+    return { success: false, error: 'Failed to update goal' }
+  }
+}
+
 export async function deleteGoal(id: string) {
   const session = await auth()
   if (!session?.user?.id) return { success: false, error: 'Unauthorized' }

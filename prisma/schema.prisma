@@ -18,6 +18,7 @@ model User {
   goals         Goal[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  settings      String?   // JSON string for settings: { theme: 'dark', notifications: true }
 }
 
 model Account {

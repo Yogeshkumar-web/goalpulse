@@ -2,6 +2,94 @@
 
 import { prisma } from '@/app/lib/prisma'
 import { revalidatePath } from 'next/cache'
+import { auth } from '@/auth'
+
+export async function createTask(goalId: string, title: string) {
+  const session = await auth()
+  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+  try {
+    const goal = await prisma.goal.findUnique({
+      where: { id: goalId },
+      select: { userId: true }
+    })
+
+    if (!goal || goal.userId !== session.user.id) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    const task = await prisma.task.create({
+      data: {
+        goalId,
+        title,
+      }
+    })
+
+    revalidatePath(`/goals/${goalId}`)
+    return { success: true, data: task }
+  } catch (error) {
+    console.error('Failed to create task:', error)
+    return { success: false, error: 'Failed to create task' }
+  }
+}
+
+export async function updateTask(taskId: string, title: string) {
+  const session = await auth()
+  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      include: { goal: true }
+    })
+
+    if (!task || task.goal.userId !== session.user.id) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    const updated = await prisma.task.update({
+      where: { id: taskId },
+      data: { title }
+    })
+
+    revalidatePath(`/goals/${task.goalId}`)
+    return { success: true, data: updated }
+  } catch (error) {
+    console.error('Failed to update task:', error)
+    return { success: false, error: 'Failed to update task' }
+  }
+}
+
+export async function deleteTask(taskId: string) {
+  const session = await auth()
+  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      include: { goal: true }
+    })
+
+    if (!task || task.goal.userId !== session.user.id) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    // Delete all completions first
+    await prisma.taskCompletion.deleteMany({
+      where: { taskId }
+    })
+
+    await prisma.task.delete({
+      where: { id: taskId }
+    })
+
+    revalidatePath(`/goals/${task.goalId}`)
+    return { success: true }
+  } catch (error) {
+    console.error('Failed to delete task:', error)
+    return { success: false, error: 'Failed to delete task' }
+  }
+}
 
 export async function toggleTaskCompletion(taskId: string, date: Date, completed: boolean) {
   try {

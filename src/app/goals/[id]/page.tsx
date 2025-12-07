@@ -1,5 +1,7 @@
 import { prisma } from '@/app/lib/prisma'
 import TaskList from '@/app/components/TaskList'
+import TaskForm from '@/app/components/TaskForm'
+import GoalActions from '@/app/components/GoalActions'
 import MomentumHistoryChart from '@/app/components/MomentumHistoryChart'
 import ContributionGraph from '@/app/components/ContributionGraph'
 import { notFound } from 'next/navigation'
@@ -82,6 +84,13 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ id:
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: 'var(--spacing-2)' }}>{goal.title}</h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--spacing-4)' }}>{goal.description}</p>
         
+        <GoalActions 
+          goalId={goal.id}
+          title={goal.title}
+          description={goal.description}
+          deadline={goal.deadline}
+        />
+        
         <div style={{ display: 'flex', gap: 'var(--spacing-4)' }}>
           <div className="card" style={{ padding: 'var(--spacing-4)', flex: 1, textAlign: 'center' }}>
             <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Momentum</div>
@@ -107,6 +116,10 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ id:
               initialCompletions={todayCompletions} 
               date={new Date()} 
             />
+            <div style={{ marginTop: 'var(--spacing-4)', paddingTop: 'var(--spacing-4)', borderTop: '1px solid var(--border)' }}>
+              <h4 style={{ marginBottom: 'var(--spacing-2)', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Add New Task</h4>
+              <TaskForm goalId={goal.id} />
+            </div>
           </div>
 
           <div className="card">
