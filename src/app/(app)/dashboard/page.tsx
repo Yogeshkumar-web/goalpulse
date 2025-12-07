@@ -1,9 +1,9 @@
-import { prisma } from '@/app/lib/prisma'
+import { prisma } from '@/app/lib/prisma' 
 import { auth } from '@/auth'
 import Link from 'next/link'
-import MotivationalCard from './components/MotivationalCard'
-import TodayTasksCard from './components/TodayTasksCard'
-import ProgressOverview from './components/ProgressOverview'
+import MotivationalCard from '@/app/components/MotivationalCard'
+import TodayTasksCard from '@/app/components/TodayTasksCard'
+import ProgressOverview from '@/app/components/ProgressOverview'
 
 async function getDashboardData(userId: string) {
   const today = new Date()

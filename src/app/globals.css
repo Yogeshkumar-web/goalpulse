@@ -120,3 +120,8 @@ button {
   animation: slide-in 0.3s ease-out;
 }
 
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+.float-anim { animation: float 6s ease-in-out infinite; }
+.float-anim-reverse { animation: float 8s ease-in-out infinite reverse; }

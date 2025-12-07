@@ -9,7 +9,7 @@ import { auth } from '@/auth'
 
 async function getGoalDetails(id: string) {
   const goal = await prisma.goal.findUnique({
-    where: { id },
+    where: { id }, 
     include: {
       tasks: true,
       logs: {

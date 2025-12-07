@@ -1,13 +1,13 @@
 'use client'
 
-import { createGoal } from '../../actions/goals'
+import { createGoal } from '@/app/actions/goals'
 import { useToast } from '@/app/components/ToastProvider'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function NewGoalPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { showToast } = useToast()
+  const { showToast } = useToast() 
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
