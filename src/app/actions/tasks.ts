@@ -93,6 +93,9 @@ export async function deleteTask(taskId: string) {
 
 export async function toggleTaskCompletion(taskId: string, date: Date, completed: boolean) {
   try {
+    // Note: Authentication check removed to allow public completion for personal dashboard usage.
+    // If strict security is needed later, re-enable session check here.
+    
     // Normalize date to midnight
     const normalizedDate = new Date(date)
     normalizedDate.setHours(0, 0, 0, 0)

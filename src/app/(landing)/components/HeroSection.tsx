@@ -11,7 +11,7 @@ export default function HeroSection() {
       background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
       position: 'relative',
       overflow: 'hidden',
-      paddingTop: '80px'
+      paddingTop: '120px'
     }}>
       {/* Animated Background Elements */}
       <div style={{
@@ -85,16 +85,6 @@ export default function HeroSection() {
             >
               🚀 Start Free Today
             </Link>
-            <a 
-              href="#features"
-              className="btn btn-ghost"
-              style={{
-                padding: '1rem 2rem',
-                fontSize: '1.1rem'
-              }}
-            >
-              📖 Learn More
-            </a>
           </div>
 
           {/* Social Proof */}

@@ -5,8 +5,8 @@ import Link from 'next/link'
 export default function CTASection() {
   return (
     <section style={{
-      padding: '6rem 2rem',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      padding: 'var(--spacing-16) 0',
+      background: 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -22,9 +22,8 @@ export default function CTASection() {
         backgroundSize: '30px 30px'
       }} />
 
-      <div style={{
+      <div className="container" style={{
         maxWidth: '800px',
-        margin: '0 auto',
         textAlign: 'center',
         position: 'relative',
         zIndex: 1
@@ -32,38 +31,33 @@ export default function CTASection() {
         <h2 style={{
           fontSize: 'clamp(2rem, 4vw, 3.5rem)',
           fontWeight: 'bold',
-          marginBottom: '1.5rem',
-          color: 'white'
+          marginBottom: 'var(--spacing-6)',
+          color: 'black'
         }}>
           Ready to Transform Your Goals?
         </h2>
 
         <p style={{
           fontSize: '1.3rem',
-          color: 'rgba(255, 255, 255, 0.9)',
-          marginBottom: '3rem',
+          color: 'rgba(0, 0, 0, 0.8)',
+          marginBottom: 'var(--spacing-12)',
           lineHeight: '1.6'
         }}>
           Join thousands of achievers who are already using GoalPulse to track their progress and build unstoppable momentum.
         </p>
 
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}>
+        <div className="flex-center" style={{ gap: 'var(--spacing-4)', flexWrap: 'wrap' }}>
           <Link
-            href="/api/auth/signin?callbackUrl=/dashboard"
+            href="/auth/login"
             className="btn"
             style={{
-              background: 'white',
-              color: '#667eea',
-              padding: '1.25rem 3rem',
-              fontSize: '1.2rem',
+              background: 'black',
+              color: 'white',
+              padding: '1rem 2rem',
+              fontSize: '1.1rem',
               fontWeight: 'bold',
               border: 'none',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+              boxShadow: 'var(--shadow-lg)',
               transition: 'transform 0.2s'
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
@@ -77,21 +71,20 @@ export default function CTASection() {
             className="btn"
             style={{
               background: 'transparent',
-              color: 'white',
-              padding: '1.25rem 3rem',
-              fontSize: '1.2rem',
-              border: '2px solid white',
+              color: 'black',
+              padding: '1rem 2rem',
+              fontSize: '1.1rem',
+              border: '2px solid black',
               transition: 'all 0.2s',
-              textDecoration: 'none',
-              display: 'inline-block'
+              textDecoration: 'none'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'white'
-              e.currentTarget.style.color = '#667eea'
+              e.currentTarget.style.background = 'black'
+              e.currentTarget.style.color = 'white'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'transparent'
-              e.currentTarget.style.color = 'white'
+              e.currentTarget.style.color = 'black'
             }}
           >
             📖 Learn More
@@ -99,9 +92,10 @@ export default function CTASection() {
         </div>
 
         <p style={{
-          marginTop: '2rem',
-          color: 'rgba(255, 255, 255, 0.8)',
-          fontSize: '0.9rem'
+          marginTop: 'var(--spacing-8)',
+          color: 'rgba(0, 0, 0, 0.7)',
+          fontSize: '0.9rem',
+          fontWeight: 500
         }}>
           ✨ No credit card required • 🔒 Free forever • ⚡ Start in 30 seconds
         </p>

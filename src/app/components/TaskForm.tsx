@@ -41,22 +41,27 @@ export default function TaskForm({ goalId, existingTask, onCancel }: TaskFormPro
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 'var(--spacing-2)', alignItems: 'center' }}>
+    <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 'var(--spacing-3)', alignItems: 'center' }}>
       <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Task title..."
+        placeholder={existingTask ? "Update task..." : "Add a new task..."}
         disabled={isSubmitting}
-        autoFocus
+        autoFocus={!!existingTask}
         style={{
           flex: 1,
-          padding: 'var(--spacing-2)',
-          borderRadius: 'var(--radius-sm)',
+          padding: 'var(--spacing-3)',
+          borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border)',
           backgroundColor: 'var(--surface)',
-          color: 'var(--text-primary)'
+          color: 'var(--text-primary)',
+          outline: 'none',
+          transition: 'border-color 0.2s',
+          fontSize: '1rem'
         }}
+        onFocus={(e) => e.target.style.borderColor = 'var(--primary)'}
+        onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
       />
       <button 
         type="submit" 
@@ -72,7 +77,7 @@ export default function TaskForm({ goalId, existingTask, onCancel }: TaskFormPro
           onClick={handleDelete}
           disabled={isSubmitting}
           className="btn"
-          style={{ padding: 'var(--spacing-2) var(--spacing-4)', backgroundColor: 'var(--danger)', color: 'white' }}
+          style={{ padding: 'var(--spacing-2) var(--spacing-4)', backgroundColor: 'var(--danger)', color: 'white', border: 'none' }}
         >
           Delete
         </button>

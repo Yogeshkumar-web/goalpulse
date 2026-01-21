@@ -30,18 +30,15 @@ export default function HowItWorksSection() {
 
   return (
     <section id="how-it-works" style={{
-      padding: '6rem 2rem',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
+      padding: 'var(--spacing-16) 0',
+      backgroundColor: 'var(--surface)'
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <h2 style={{
+      <div className="container">
+        <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-12)' }}>
+          <h2 className="text-gradient" style={{
             fontSize: 'clamp(2rem, 4vw, 3rem)',
             fontWeight: 'bold',
-            marginBottom: '1rem',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            marginBottom: 'var(--spacing-4)'
           }}>
             How It Works
           </h2>
@@ -53,7 +50,7 @@ export default function HowItWorksSection() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '3rem',
+          gap: 'var(--spacing-8)',
           position: 'relative'
         }}>
           {steps.map((step, index) => (
@@ -70,7 +67,8 @@ export default function HowItWorksSection() {
                   left: 50%;
                   width: 100%;
                   height: 2px;
-                  background: linear-gradient(90deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 100%);
+                  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+                  opacity: 0.3;
                   z-index: 0;
                   display: none;
                 }
@@ -88,7 +86,8 @@ export default function HowItWorksSection() {
                 height: '100px',
                 margin: '0 auto 1.5rem',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'var(--surface-hover)',
+                border: '1px solid var(--border)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -96,7 +95,7 @@ export default function HowItWorksSection() {
                 fontWeight: 'bold',
                 position: 'relative',
                 zIndex: 1,
-                boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
+                boxShadow: 'var(--shadow-lg)'
               }}>
                 {step.icon}
               </div>
@@ -104,7 +103,7 @@ export default function HowItWorksSection() {
               <h3 style={{
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
-                marginBottom: '0.75rem'
+                marginBottom: 'var(--spacing-2)'
               }}>
                 {step.title}
               </h3>

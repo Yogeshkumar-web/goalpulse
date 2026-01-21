@@ -2,18 +2,28 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { signOut } from 'next-auth/react'
 
-export default function Header() {
+type HeaderProps = {
+  isAuthenticated: boolean
+  userName?: string
+}
+
+export default function Header({ isAuthenticated, userName }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      setIsScrolled(window.scrollY > 20)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/' })
+  }
 
   return (
     <header style={{
@@ -23,14 +33,12 @@ export default function Header() {
       right: 0,
       zIndex: 1000,
       transition: 'all 0.3s ease',
-      backgroundColor: isScrolled ? 'rgba(15, 23, 42, 0.8)' : 'transparent',
-      backdropFilter: isScrolled ? 'blur(10px)' : 'none',
-      borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+      backgroundColor: isScrolled ? 'rgba(5, 5, 5, 0.8)' : 'transparent',
+      backdropFilter: isScrolled ? 'blur(16px)' : 'none',
+      borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+      padding: isScrolled ? '1rem 0' : '1.5rem 0'
     }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '1rem 2rem',
+      <div className="container" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -38,27 +46,33 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{ fontSize: '1.5rem' }}>🎯</span>
-          <span style={{ fontSize: '1.5rem', fontWeight: 'bold', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span className="text-gradient" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
             GoalPulse
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: '2rem' }} className="desktop-nav">
-            <a href="#features" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Features</a>
-            <a href="#how-it-works" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>How It Works</a>
-            <a href="#testimonials" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Testimonials</a>
-          </div>
-
-          {/* CTA Buttons */}
+          {/* Auth Buttons */}
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <Link href="/api/auth/signin?callbackUrl=/dashboard" className="btn btn-ghost desktop-only">
-              Sign In
-            </Link>
-            <Link href="/api/auth/signin?callbackUrl=/dashboard" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-              Get Started
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <span className="desktop-only" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                  {userName}
+                </span>
+                <button 
+                  onClick={handleLogout}
+                  className="btn btn-secondary" 
+                  style={{ padding: '0.5rem 1.25rem' }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem' }}>
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -66,11 +80,8 @@ export default function Header() {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="mobile-menu-btn"
             style={{
-              background: 'none',
-              border: 'none',
-              color: 'white',
+              color: 'var(--text-primary)',
               fontSize: '1.5rem',
-              cursor: 'pointer',
               padding: '0.5rem'
             }}
             aria-label="Toggle menu"
@@ -87,48 +98,40 @@ export default function Header() {
           top: '100%',
           left: 0,
           right: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.95)',
-          backdropFilter: 'blur(10px)',
+          backgroundColor: 'var(--surface)',
+          borderBottom: '1px solid var(--border)',
           padding: '2rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.5rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          animation: 'fadeIn 0.2s ease-out'
         }}>
-          <a href="#features" style={{ color: 'white', textDecoration: 'none', fontSize: '1.1rem' }} onClick={() => setIsMobileMenuOpen(false)}>Features</a>
-          <a href="#how-it-works" style={{ color: 'white', textDecoration: 'none', fontSize: '1.1rem' }} onClick={() => setIsMobileMenuOpen(false)}>How It Works</a>
-          <a href="#testimonials" style={{ color: 'white', textDecoration: 'none', fontSize: '1.1rem' }} onClick={() => setIsMobileMenuOpen(false)}>Testimonials</a>
-          <Link href="/api/auth/signin?callbackUrl=/dashboard" className="btn btn-ghost" style={{ width: '100%', textAlign: 'center' }}>
-            Sign In
-          </Link>
+          {isAuthenticated ? (
+            <button 
+              onClick={handleLogout}
+              className="btn btn-secondary" 
+              style={{ width: '100%', textAlign: 'center' }}
+            >
+              Logout
+            </button>
+          ) : (
+            <Link href="/login" className="btn btn-primary" style={{ width: '100%', textAlign: 'center' }} onClick={() => setIsMobileMenuOpen(false)}>
+              Login
+            </Link>
+          )}
         </div>
       )}
 
       <style jsx global>{`
-        .desktop-nav {
-          display: none;
-        }
-        
-        .desktop-only {
-          display: none;
-        }
-        
-        .mobile-menu-btn {
-          display: block;
-        }
+        .desktop-nav { display: none; }
+        .desktop-only { display: none; }
+        .mobile-menu-btn { display: block; }
+        .hover\\:text-primary:hover { color: var(--text-primary) !important; }
         
         @media (min-width: 768px) {
-          .desktop-nav {
-            display: flex !important;
-          }
-          
-          .desktop-only {
-            display: block !important;
-          }
-          
-          .mobile-menu-btn {
-            display: none !important;
-          }
+          .desktop-nav { display: flex !important; }
+          .desktop-only { display: inline-block !important; }
+          .mobile-menu-btn { display: none !important; }
         }
       `}</style>
     </header>

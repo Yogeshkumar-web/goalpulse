@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { updateTask, deleteTask } from '@/app/actions/tasks'
+import TaskForm from './TaskForm'
 
 type TaskItemProps = {
   task: {
@@ -10,9 +11,10 @@ type TaskItemProps = {
   }
   isCompleted: boolean
   onToggle: (taskId: string) => void
+  isReadOnly?: boolean
 }
 
-export default function TaskItem({ task, isCompleted, onToggle }: TaskItemProps) {
+export default function TaskItem({ task, isCompleted, onToggle, isReadOnly = false }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -45,88 +47,89 @@ export default function TaskItem({ task, isCompleted, onToggle }: TaskItemProps)
 
   if (isEditing) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 'var(--spacing-2)',
-        padding: 'var(--spacing-2)',
-        backgroundColor: 'var(--surface)',
-        borderRadius: 'var(--radius-sm)'
-      }}>
-        <input
-          type="text"
-          value={editTitle}
-          onChange={(e) => setEditTitle(e.target.value)}
-          disabled={isSubmitting}
-          autoFocus
-          style={{
-            flex: 1,
-            padding: 'var(--spacing-2)',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid var(--border)',
-            backgroundColor: 'var(--background)',
-            color: 'var(--text-primary)'
-          }}
-        />
-        <button 
-          onClick={handleUpdate}
-          disabled={isSubmitting || !editTitle.trim()}
-          className="btn btn-primary"
-          style={{ fontSize: '0.8rem', padding: 'var(--spacing-1) var(--spacing-2)' }}
-        >
-          Save
-        </button>
-        <button 
-          onClick={() => setIsEditing(false)}
-          disabled={isSubmitting}
-          className="btn btn-ghost"
-          style={{ fontSize: '0.8rem', padding: 'var(--spacing-1) var(--spacing-2)' }}
-        >
-          Cancel
-        </button>
-      </div>
+      <TaskForm 
+        existingTask={task}
+        onCancel={() => setIsEditing(false)}
+      />
     )
   }
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: 'var(--spacing-2)',
-      padding: 'var(--spacing-2)',
-      borderRadius: 'var(--radius-sm)',
-      backgroundColor: isCompleted ? 'rgba(34, 197, 94, 0.05)' : 'transparent',
-      transition: 'background-color 0.2s'
-    }}>
-      <input
-        type="checkbox"
-        checked={isCompleted}
-        onChange={() => onToggle(task.id)}
-        style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: 'var(--primary)' }}
-      />
+    <div 
+      className="group"
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 'var(--spacing-3)',
+        padding: 'var(--spacing-3)',
+        borderRadius: 'var(--radius-md)',
+        backgroundColor: isCompleted ? 'rgba(0, 230, 118, 0.05)' : 'transparent',
+        border: '1px solid transparent',
+        transition: 'all 0.2s',
+        marginBottom: 'var(--spacing-2)'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = isCompleted ? 'rgba(0, 230, 118, 0.08)' : 'var(--surface-hover)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = isCompleted ? 'rgba(0, 230, 118, 0.05)' : 'transparent'
+      }}
+    >
+      <div 
+        onClick={() => onToggle(task.id)}
+        style={{ 
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '24px',
+          height: '24px',
+          borderRadius: '50%',
+          border: `2px solid ${isCompleted ? 'var(--primary)' : 'var(--text-muted)'}`,
+          backgroundColor: isCompleted ? 'var(--primary)' : 'transparent',
+          position: 'relative',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
+      >
+        {isCompleted && (
+          <span className="check-pop" style={{ color: 'black', fontSize: '14px', fontWeight: 'bold' }}>✓</span>
+        )}
+      </div>
+
       <span style={{ 
         flex: 1,
         textDecoration: isCompleted ? 'line-through' : 'none',
-        color: isCompleted ? 'var(--text-secondary)' : 'var(--text-primary)',
-        transition: 'color 0.2s'
-      }}>
+        color: isCompleted ? 'var(--text-muted)' : 'var(--text-primary)',
+        transition: 'color 0.2s',
+        fontSize: '1rem',
+        cursor: 'pointer'
+      }} onClick={() => onToggle(task.id)}>
         {task.title}
       </span>
-      <button 
-        onClick={() => setIsEditing(true)}
-        className="btn btn-ghost"
-        style={{ fontSize: '0.8rem', padding: 'var(--spacing-1) var(--spacing-2)' }}
-      >
-        ✏️
-      </button>
-      <button 
-        onClick={handleDelete}
-        disabled={isSubmitting}
-        className="btn btn-ghost"
-        style={{ fontSize: '0.8rem', padding: 'var(--spacing-1) var(--spacing-2)', color: 'var(--danger)' }}
-      >
-        🗑️
-      </button>
+
+      {!isReadOnly && (
+        <div style={{ display: 'flex', gap: 'var(--spacing-1)', opacity: 0.5, transition: 'opacity 0.2s' }} 
+             onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+             onMouseLeave={(e) => e.currentTarget.style.opacity = '0.5'}>
+          <button 
+            onClick={() => setIsEditing(true)}
+            className="btn btn-ghost"
+            style={{ fontSize: '0.9rem', padding: 'var(--spacing-2)' }}
+            title="Edit"
+          >
+            ✏️
+          </button>
+          <button 
+            onClick={handleDelete}
+            disabled={isSubmitting}
+            className="btn btn-ghost"
+            style={{ fontSize: '0.9rem', padding: 'var(--spacing-2)', color: 'var(--danger)' }}
+            title="Delete"
+          >
+            🗑️
+          </button>
+        </div>
+      )}
     </div>
   )
 }

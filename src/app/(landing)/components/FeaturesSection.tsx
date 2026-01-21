@@ -36,18 +36,15 @@ export default function FeaturesSection() {
 
   return (
     <section id="features" style={{
-      padding: '6rem 2rem',
-      backgroundColor: '#1e293b'
+      padding: 'var(--spacing-16) 0',
+      backgroundColor: 'var(--background)'
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <h2 style={{
+      <div className="container">
+        <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-12)' }}>
+          <h2 className="text-gradient" style={{
             fontSize: 'clamp(2rem, 4vw, 3rem)',
             fontWeight: 'bold',
-            marginBottom: '1rem',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            marginBottom: 'var(--spacing-4)'
           }}>
             Everything You Need to Succeed
           </h2>
@@ -59,32 +56,31 @@ export default function FeaturesSection() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '2rem'
+          gap: 'var(--spacing-8)'
         }}>
           {features.map((feature, index) => (
             <div
               key={index}
-              className="card"
+              className="glass-card"
               style={{
-                padding: '2rem',
+                padding: 'var(--spacing-8)',
                 textAlign: 'center',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                cursor: 'pointer',
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-10px)'
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(102, 126, 234, 0.2)'
+                e.currentTarget.style.boxShadow = 'var(--glow-primary)'
+                e.currentTarget.style.borderColor = 'var(--primary)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)'
                 e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)'
               }}
             >
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{feature.icon}</div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>
+              <div style={{ fontSize: '3rem', marginBottom: 'var(--spacing-4)' }}>{feature.icon}</div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 'bold', marginBottom: 'var(--spacing-2)' }}>
                 {feature.title}
               </h3>
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>

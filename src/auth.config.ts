@@ -12,11 +12,10 @@ export const authConfig = {
       const isDashboard = nextUrl.pathname.startsWith('/dashboard')
       const isGoalPage = nextUrl.pathname.startsWith('/goals')
       const isSettings = nextUrl.pathname.startsWith('/settings')
-      const isRoot = nextUrl.pathname === '/'
       const isLogin = nextUrl.pathname === '/login'
 
-      // Redirect authenticated users from landing page or login page to dashboard
-      if ((isRoot || isLogin) && isLoggedIn) {
+      // Redirect authenticated users from login page to dashboard
+      if (isLogin && isLoggedIn) {
         return Response.redirect(new URL('/dashboard', nextUrl))
       }
 

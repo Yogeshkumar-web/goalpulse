@@ -47,29 +47,31 @@ export default function GoalActions({ goalId, title, description, deadline }: Go
 
   if (isEditing) {
     return (
-      <div className="card" style={{ marginBottom: 'var(--spacing-6)' }}>
-        <h3 style={{ marginBottom: 'var(--spacing-4)', fontSize: '1.2rem' }}>Edit Goal</h3>
+      <div className="glass-card" style={{ marginBottom: 'var(--spacing-6)', padding: 'var(--spacing-6)' }}>
+        <h3 className="text-gradient" style={{ marginBottom: 'var(--spacing-4)', fontSize: '1.2rem', fontWeight: 'bold' }}>Edit Goal</h3>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: 'bold' }}>Title</label>
+            <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Title</label>
             <input
               type="text"
               name="title"
               defaultValue={title}
               required
+              className="input-base"
               style={{
                 width: '100%',
                 padding: 'var(--spacing-3)',
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border)',
-                backgroundColor: 'var(--surface)',
-                color: 'var(--text-primary)'
+                backgroundColor: 'var(--surface-hover)',
+                color: 'var(--text-primary)',
+                outline: 'none'
               }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: 'bold' }}>Description</label>
+            <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Description</label>
             <textarea
               name="description"
               defaultValue={description || ''}
@@ -79,15 +81,16 @@ export default function GoalActions({ goalId, title, description, deadline }: Go
                 padding: 'var(--spacing-3)',
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border)',
-                backgroundColor: 'var(--surface)',
+                backgroundColor: 'var(--surface-hover)',
                 color: 'var(--text-primary)',
-                resize: 'vertical'
+                resize: 'vertical',
+                outline: 'none'
               }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: 'bold' }}>Deadline</label>
+            <label style={{ display: 'block', marginBottom: 'var(--spacing-2)', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Deadline</label>
             <input
               type="date"
               name="deadline"
@@ -98,20 +101,22 @@ export default function GoalActions({ goalId, title, description, deadline }: Go
                 padding: 'var(--spacing-3)',
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border)',
-                backgroundColor: 'var(--surface)',
-                color: 'var(--text-primary)'
+                backgroundColor: 'var(--surface-hover)',
+                color: 'var(--text-primary)',
+                outline: 'none'
               }}
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 'var(--spacing-2)' }}>
-            <button type="submit" className="btn btn-primary">
+          <div style={{ display: 'flex', gap: 'var(--spacing-3)', marginTop: 'var(--spacing-2)' }}>
+            <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
               Save Changes
             </button>
             <button 
               type="button" 
               onClick={() => setIsEditing(false)}
               className="btn btn-ghost"
+              style={{ flex: 1 }}
             >
               Cancel
             </button>
@@ -122,13 +127,13 @@ export default function GoalActions({ goalId, title, description, deadline }: Go
   }
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-4)' }}>
+    <div style={{ display: 'flex', gap: 'var(--spacing-3)', marginBottom: 'var(--spacing-6)' }}>
       <button 
         onClick={() => setIsEditing(true)}
-        className="btn"
-        style={{ fontSize: '0.9rem', padding: 'var(--spacing-2) var(--spacing-3)' }}
+        className="btn btn-ghost"
+        style={{ fontSize: '0.9rem', padding: 'var(--spacing-2) var(--spacing-4)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}
       >
-        ✏️ Edit Goal
+        <span>✏️</span> Edit Goal
       </button>
       <button 
         onClick={handleDelete}
@@ -136,12 +141,14 @@ export default function GoalActions({ goalId, title, description, deadline }: Go
         className="btn"
         style={{ 
           fontSize: '0.9rem', 
-          padding: 'var(--spacing-2) var(--spacing-3)',
-          backgroundColor: 'var(--danger)',
-          color: 'white'
+          padding: 'var(--spacing-2) var(--spacing-4)',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          color: 'var(--danger)',
+          border: '1px solid var(--danger)',
+          display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)'
         }}
       >
-        {isDeleting ? 'Deleting...' : '🗑️ Delete Goal'}
+        <span>🗑️</span> {isDeleting ? 'Deleting...' : 'Delete Goal'}
       </button>
     </div>
   )
