@@ -5,7 +5,8 @@ export default function Footer() {
     <footer style={{
       backgroundColor: 'var(--surface)',
       borderTop: '1px solid var(--border)',
-      padding: 'var(--spacing-12) var(--spacing-4) var(--spacing-8)'
+      padding: 'var(--spacing-16) var(--spacing-4) var(--spacing-12)',
+      marginTop: 'var(--spacing-16)'
     }}>
       <div className="container" style={{
         display: 'grid',
