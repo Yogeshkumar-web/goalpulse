@@ -8,6 +8,7 @@ type TaskItemProps = {
   task: {
     id: string
     title: string
+    goalId: string
   }
   isCompleted: boolean
   onToggle: (taskId: string) => void
@@ -48,6 +49,7 @@ export default function TaskItem({ task, isCompleted, onToggle, isReadOnly = fal
   if (isEditing) {
     return (
       <TaskForm 
+        goalId={task.goalId}
         existingTask={task}
         onCancel={() => setIsEditing(false)}
       />

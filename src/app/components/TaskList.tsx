@@ -7,6 +7,7 @@ import TaskItem from './TaskItem'
 type Task = {
   id: string
   title: string
+  goalId: string
 }
 
 type TaskCompletion = {
